@@ -1,0 +1,5 @@
+
+config BR2_PACKAGE_IOCTL_DRIVER
+	bool "ioctl-assignments"
+	help
+	  Compile .ko and application to be loaded

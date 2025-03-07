@@ -1,0 +1,1 @@
+source "$BR2_EXTERNAL_external_base_PATH/package/ioctl-driver/Config.in"
