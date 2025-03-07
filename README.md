@@ -14,6 +14,38 @@
 
 - Build using `./build.sh`
 - Run using `./run.sh`
+  ```
+  qemu-system-aarch64: -serial tcp::1122,server,wait: info: QEMU waiting for connection on: disconnected:tcp:0.0.0.0:1122,server=on
+  ```
+- See console with `telnet localhost 1122` (see `-serial` option)
+
+### Debug
+
+#### kgdb
+
+- See config from `kernel-config-frag`
+  - Setup GDB Script for Kernel debugging
+  - Magic SysRq Key
+  - KGDB: kernel debugger
+    - KGDB: use kgdb over the serial console
+    - KGDB_KDB
+- On boot, the following message will print:
+  ```
+  KGDB: Registered I/O driver kgdboc
+  KGDB: Waiting for connection from remote gdb...
+  ```
+- On the host, use the following command:
+  ```
+  cd ~/buildroot/buildroot/output/build/linux-6.11.11 &&
+     aarch64-none-linux-gnu-gdb vmlinux`
+  ```
+
+##### On another platform than QEMU
+
+- Update grub config parameter `GRUB_COMMAND_LINE_LINUX_DEFAULT` from
+  `/etc/default/grub` by adding `KGDB_PARAM_SERIAL` content from `run.sh`.
+- If ethernet needs to be used, instead of serial, we can pass the command:
+  `` instead.
 
 ## Basic setup
 
