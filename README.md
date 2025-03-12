@@ -8,18 +8,41 @@
 - Configure Linux through `make linux_menuconfig`
 - Setup the external modules
 - Build the source
-- Start on QEMU (root, root as login/password)
+- Start on QEMU (`root`/`root` as login/password)
+
+## Basic setup
+
+- With `make menuconfig`
+  - Set `Linux Kernel` config option
+  - Set `Use default Architecture Config` config option
+    Otherwise, you need to specify `BR2_LINUX_KERNEL_DEFCONFIG`.
+
+- Export `BR2_EXTERNAL` to the path with the external build
+- Export `BR2_DEFCONFIG` to the path with the custom config
 
 ## Quick start
 
 - Build using `./build.sh`
 - Run using `./run.sh`
-  ```
-  qemu-system-aarch64: -serial tcp::1122,server,wait: info: QEMU waiting for connection on: disconnected:tcp:0.0.0.0:1122,server=on
-  ```
-- See console with `telnet localhost 1122` (see `-serial` option)
+
 
 ### Debug
+
+#### QEMU gdb
+
+- QEMU is configured to boot and wait for gdb
+- On the host, use the following command:
+  ```
+  cd ~/buildroot/buildroot/output/build/linux-6.11.11/ &&
+     aarch64-none-linux-gnu-gdb -ex 'file vmlinux' \
+                                -ex 'target remote localhost:1234'
+  ```
+- Continue `c` to boot
+- Use the `add-symbol` command printed on boot but specify the
+  `.ko` from `../build/ioctl-<sha>/dev/ioctl.ko`
+- Use `b ioctl_d_interface_open`
+- Continue `c`
+- Start on QEMU console `ioctl_app`
 
 #### kgdb
 
@@ -34,11 +57,6 @@
   KGDB: Registered I/O driver kgdboc
   KGDB: Waiting for connection from remote gdb...
   ```
-- On the host, use the following command:
-  ```
-  cd ~/buildroot/buildroot/output/build/linux-6.11.11 &&
-     aarch64-none-linux-gnu-gdb vmlinux`
-  ```
 
 ##### On another platform than QEMU
 
@@ -47,12 +65,3 @@
 - If ethernet needs to be used, instead of serial, we can pass the command:
   `` instead.
 
-## Basic setup
-
-- With `make menuconfig`
-  - Set `Linux Kernel` config option
-  - Set `Use default Architecture Config` config option
-    Otherwise, you need to specify `BR2_LINUX_KERNEL_DEFCONFIG`.
-
-- Export `BR2_EXTERNAL` to the path with the external build
-- Export `BR2_DEFCONFIG` to the path with the custom config
