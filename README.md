@@ -34,8 +34,8 @@
 - On the host, use the following command:
   ```
   cd ~/buildroot/buildroot/output/build/linux-6.11.11/ &&
-     aarch64-none-linux-gnu-gdb -ex 'file vmlinux' \
-                                -ex 'target remote localhost:1234'
+     aarch64-none-linux-gnu-gdb vmlinux \
+        -ex 'target remote localhost:1234'
   ```
 - Continue `c` to boot
 - Use the `add-symbol` command printed on boot but specify the
